@@ -13,7 +13,7 @@
 //********************************************************
 #include <string> // For actual strings
 #include<fstream> // For file manipulation
-#include<iostream> // For regular i/o manipulations
+#include<iostream> // For regular i/o manipulation
 #include<stdio.h> // Streller you said include this
 #ifndef Account.h
 #define Account
@@ -24,14 +24,15 @@ struct Account
 	string name; // Name of person with account
 	int acct_val; // Current net account value
 };
-string GetAccountFile(fstream File); // Finds account file name and error checks if it's accurate
-string GetTransactionHistoryFile(fstream File); // Finds Transaction History file name and error checks if it's accurate
+void GetAccountFile(fstream File); // Finds account file name and error checks if it's accurate then opens it
+void GetTransactionHistoryFile(fstream File); // Finds Transaction History file name and error checks if it's accurate then opens it
 int GetAccountNumber(fstream AccountFile /*File where account information is*/); // Gets account number
 string GetAccountName(fstream AccountFile, // File where account information is
-					  string AccountName // Name associated with account number
+					  int AccountNumber // The account number assoicated with user
 					 );
 int GetDeposits(fstream TransactionHistory, // Finds Transaction History
-				int AccountNumber // Account Number of user
+				int AccountNumber, // Account Number of user
+				int[
 				); // Returns sum of all withdrawls for a user
 int GetNumberOfDeposits(fstream TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user

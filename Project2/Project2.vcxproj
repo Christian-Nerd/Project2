@@ -129,6 +129,14 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="accounts.txt" />
+    <Text Include="transactions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AccountClient.cpp" />
+    <ClCompile Include="AccountDriver.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
