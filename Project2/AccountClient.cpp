@@ -90,14 +90,53 @@ void GetTransactionHistoryFile(fstream File)
 // Function Name: GetAccountNumber
 // Purpose: Gets & returns account number from account file
 // Parameters:
-//		Input: Account File, and Account Number
+//		Input: Account File, and Account Number, and Array of Previously Used account numbers, How many used numbers in array
 //		Input & Output: None
 //		Output: None
 // Return Value: Account Number
 // Non-local Variables Used: None
-// Functions Called: 
+// Functions Called: std::find, std::number_limits<streamsize>::max, std::isdigit
 //*****************************************************************
-string GetAccountName(fstream AccountFile, int AccountNumber, ) 
+int GetAccountNumber(fstream AccountFile, int UsedAccountNumbers[], int &NoOfNumsUsed) 
 {
-		
+	//Initilizes Variables
+	int AccountNumber; // Potential Account Number
+	char CurrentStreamCharacter = AccountFile.get();
+	// Until end of file checks for an unused account number
+	while (!AccountFile.eof())
+	{
+		// Checks if account number already processed if so you ignore 
+		if (CurrentStreamCharacter == '\n' && isdigit(cin.peek()))
+		{
+			if (find(std::begin(UsedAccountNumbers), std::end(UsedAccountNumbers + NoOfNumsUsed), NoOfNumsUsed) != NoOfNumsUsed)
+			{
+				AccountFile.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignores line completely
+				continue;
+			}
+			else
+			{
+				AccountFile >> AccountNumber;
+				UsedAccountNumbers[NoOfNumsUsed++]; // Iterate Number of Numbers used & add AccountNumber to UsedAccountNumbers before 
+				// NoOfNumbers is iterated
+				return AccountNumber;
+			}
+		}
+	}
+	return -1;
+}
+
+//*****************************************************************
+// Function Name: LinearSearch
+// Purpose: Gets & returns Element in an array if it's not there returns -1
+// Parameters:
+//		Input: Array, Size of array, and key
+//		Input & Output: None
+//		Output: None
+// Return Value: Where key element is in there(-1 if not)
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
+int LinearSearch() 
+{
+	
 }

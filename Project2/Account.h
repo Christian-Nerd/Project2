@@ -26,14 +26,16 @@ struct Account
 };
 void GetAccountFile(fstream File); // Finds account file name and error checks if it's accurate then opens it
 void GetTransactionHistoryFile(fstream File); // Finds Transaction History file name and error checks if it's accurate then opens it
-int GetAccountNumber(fstream AccountFile /*File where account information is*/); // Gets account number
+int GetAccountNumber(fstream AccountFile, // File where account information is
+				   	  int UsedAccountNumbers[], // Previously used account numbers
+				  	  int &NoOfNumsUsed // How many used numbers in array
+					); // Gets account number
 string GetAccountName(fstream AccountFile, // File where account information is
 					  int AccountNumber // The account number assoicated with user
 					 );
 int GetDeposits(fstream TransactionHistory, // Finds Transaction History
-				int AccountNumber, // Account Number of user
-				int[
-				); // Returns sum of all withdrawls for a user
+				int AccountNumber // Account Number of user
+			    ); // Returns sum of all withdrawls for a user
 int GetNumberOfDeposits(fstream TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Deposits
@@ -52,7 +54,9 @@ void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  int Deposits, // Sum of all deposits
 						  int NumberOfWithdrawls, // Number of Deposits
 						  int Withdrawls // Sum of withdrawls
-						  );
-					      
-
+						  ); // Outputs the monthly report
+int LinearSearch(int List[], 
+				int Size, 
+				int key // 
+				); // Searchs array for key value
 #endif
