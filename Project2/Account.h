@@ -36,9 +36,6 @@ string GetAccountName(fstream AccountFile, // File where account information is
 int GetPreviousAccountBalance(fstream TransactionHistory, // Finds Transaction History
 					  		 int AccountNumber // Account Number of user
 							 ); // Returns Previous account Transaction History
-int GetDeposits(fstream TransactionHistory, // Finds Transaction History
-				int AccountNumber // Account Number of user
-			    ); // Returns sum of all withdrawls for a user
 int GetNumberOfDeposits(fstream TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Deposits
@@ -48,11 +45,12 @@ int GetSumOfDeposits(fstream TransactionHistory, // Finds Transaction History
 int GetNumberOfWithdrawls(fstream TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Withdrawls
-int GetSumOfWithdrawls(fstream TransactionHistory, // Finds Transaction History
+int GetSumOfWithdrawls(fstream TrathnsactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number
-						  ); // Returns Sum of Withdrawls
+						  ); // Returns Sum of Withdrawls assoicated with user
 void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  string AccountName, // Account name assoicated with user
+						  int BeginningBalance, // Balance at start of month
 					      int NumberOfDeposits, // Number of Deposits by user 
 						  int Deposits, // Sum of all deposits
 						  int NumberOfWithdrawls, // Number of Deposits

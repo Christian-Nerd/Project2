@@ -100,7 +100,7 @@ void GetTransactionHistoryFile(fstream File)
 int GetAccountNumber(fstream AccountFile, int UsedAccountNumbers[], int &NoOfNumsUsed) 
 {
 	//Initilizes Variables
-	int AccountNumber; // Potential Account Number
+	int CurrentAccountNumber = -1; // Potential Account Number
 	char CurrentStreamCharacter = AccountFile.get(); // Finds current stream character
 	// Until end of file checks for an unused account number
 	while (!AccountFile.eof())
@@ -109,19 +109,20 @@ int GetAccountNumber(fstream AccountFile, int UsedAccountNumbers[], int &NoOfNum
 		if (CurrentStreamCharacter == '\n' && isdigit(cin.peek()))
 		{
 			// Checks if account number already processed if so you ignore 
-			if (LinearSearch(UsedAccountNumbers, NoOfNumsUsed, AccountNumber) >= 0)
+			if (LinearSearch(UsedAccountNumbers, NoOfNumsUsed, CurrentAccountNumber) >= 0)
 			{
 				AccountFile.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignores line completely
 				continue;
 			}
 			else
 			{
-				AccountFile >> AccountNumber;
+				AccountFile >> CurrentAccountNumber;
 				UsedAccountNumbers[NoOfNumsUsed++]; // Iterate Number of Numbers used  
 				// & add AccountNumber tosedAccountNumbers before 
 				// NoOfNumbers is iterated
 				AccountFile.seekg(ios::beg); // Set stream back to beginning
-				return AccountNumber; // Returns the account number since it the most recent one not previously used
+				return CurrentAccountNumber; // Returns the account number 
+				// since it the most recent one not previously used
 			}
 		}
 	}
@@ -166,22 +167,38 @@ string GetAccountName(fstream AccountFile, int AccountNumber)
 	return ""; // If account name not found return empty string.
 }
 
-
-
+//*****************************************************************
+// Function Name: GetPreviousAccountBalance
+// Purpose: Gets & returns previous account balance assoicated with a user in the Account File
+// Parameters:
+//		Input: Transaction File, Account Number
+//		Input & Output: None
+//		Output: None
+// Return Value: Number of deposits assoicated with users
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
 int GetPreviousAccountBalance(fstream TransactionHistory, int AccountNumber) 
 {
 	// Initialize Variables
 	int PreviousAccountBalance; // Previous Account Balance
 	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
-	string Dummy; // Dummy variable to disgard Account Number
+	int CurrentAcccountNumber; // Checks for current account number to see if it's out account number
 	while (!TransactionHistory.eof()) 
 	{
 		// If the next string is the account number
 		if (CurrentStreamCharacter == '\n' && isdigit(TransactionHistory.peek())) 
 		{
-			
+			TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
+			if (CurrentAcccountNumber == AccountNumber) 
+			{
+				TransactionHistory >> PreviousAccountBalance; // Assigns previous account balance to a variable
+				TransactionHistory.seekg(ios::beg); // Returns stream to beginning
+				return PreviousAccountBalance;
+			}
 		}
 	}
+	return -1;
 }
 
 //*****************************************************************
@@ -229,11 +246,12 @@ int GetNumberOfDeposits(fstream TransactionHistory, int AccountNumber)
 		}
 	    CurrentStreamCharacter = TransactionHistory.get(); 
 	}
+	return NumOfDeposits;
 }
 
 
 //*****************************************************************
-// Function Name: GetDeposits
+// Function Name: GetSumOfDeposits
 // Purpose: Gets & returns the sum of all deposits associated with a user in the Transaction File
 // Parameters:
 //		Input: Transaction File, Account Number
@@ -243,13 +261,14 @@ int GetNumberOfDeposits(fstream TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetDeposits(fstream TransactionHistory, int AccountNumber) 
+int GetSumOfDeposits(fstream TransactionHistory, int AccountNumber) 
 {
 	// Initilizes Variables
-	string Dummy; // string variable to clear Previous Account Balance 
+	string Dummy = ""; // string variable to disgard Previous Account Balance 
 	// and check if you find account number from stream
 	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
-	int CurrentNumber, SumOfDeposits;
+	int CurrentNumber = 0; // Current Deposit number
+	int SumOfDeposits = 0; // Sum of all deposits associated with user
 	while (!TransactionHistory.eof())
 	{
 		// If next string account number
@@ -277,6 +296,103 @@ int GetDeposits(fstream TransactionHistory, int AccountNumber)
 		}
 	    CurrentStreamCharacter = TransactionHistory.get(); 
 	}
+	return SumOfDeposits;
+}
+
+//*****************************************************************
+// Function Name: GetNumberOfWithdrawls
+// Purpose: Gets the number of withdrawls a user made
+// Parameters:
+//		Input: Transaction File, Account Number
+//		Input & Output: None
+//		Output: None
+// Return Value: Number of Withdrawls a user made 
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
+int GetNumberOfWithdrawls(fstream TransactionHistory, int AccountNumber) 
+{
+	// Initilizes Variables
+	string Dummy; // string variable to clear Previous Account Balance 
+	int NumOfWithdrawls = 0;
+	// and check if you find account number from stream
+	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
+	while (!TransactionHistory.eof())
+	{
+		// If next string account number
+		if (CurrentStreamCharacter == '\n' && isdigit(TransactionHistory.peek()))
+		{
+			TransactionHistory >> Dummy; // Puts account name into dummy variable
+			// Checks if current account number is our account number
+			if (Dummy.compare(to_string(AccountNumber)) == 0)
+			{
+				TransactionHistory >> Dummy; // Gets rid of current account balance
+				while (CurrentStreamCharacter != '\n' && !TransactionHistory.eof())
+				{
+					switch (tolower(CurrentStreamCharacter))
+					{
+						case 'w':
+							NumOfWithdrawls++; // Adds 1 to Number of deposits
+							TransactionHistory >> Dummy; // Skips to next word;
+							break;
+						default:
+							CurrentStreamCharacter = TransactionHistory.get(); 
+							continue;
+					}
+				}
+			}
+		}
+	    CurrentStreamCharacter = TransactionHistory.get(); 
+	}
+	return NumOfWithdrawls;
+}
+
+
+//*****************************************************************
+// Function Name: GetSumOfWithdrawls
+// Purpose: Gets the sum of withdrawls a user made
+// Parameters:
+//		Input: Transaction File, Account Number
+//		Input & Output: None
+//		Output: None
+// Return Value: Sum of all withdrawls 
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
+int GetSumOfWithdrawls(fstream TransactionHistory, int AccountNumber)
+{
+	// Initilizes Variables
+	string Dummy; // string variable to clear Previous Account Balance 
+	int CurrentWithdrawl; // Current withdrawl number 
+	int SumOfWithdrawls = 0; // Sum of Withdrawls 
+	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
+	while (!TransactionHistory.eof())
+	{
+		// If next string account number
+		if (CurrentStreamCharacter == '\n' && isdigit(TransactionHistory.peek()))
+		{
+			TransactionHistory >> Dummy; // Puts account name into dummy variable
+			// Checks if current account number is our account number
+			if (Dummy.compare(to_string(AccountNumber)) == 0)
+			{
+				TransactionHistory >> Dummy; // Gets rid of current account balance
+				while (CurrentStreamCharacter != '\n' && !TransactionHistory.eof())
+				{
+					switch (tolower(CurrentStreamCharacter))
+					{
+						case 'w':
+							TransactionHistory >> CurrentWithdrawl; // Skips to next word;
+							break;
+						default:
+							CurrentStreamCharacter = TransactionHistory.get(); 
+							continue;
+					}
+				}
+			}
+		}
+	    CurrentStreamCharacter = TransactionHistory.get(); 
+	}
+	return 0;
 }
 
 //*****************************************************************
@@ -302,3 +418,25 @@ int LinearSearch(int List[], int Size, int Key)
 }
 
 
+//*****************************************************************
+// Function Name: OutputAccountHistory
+// Purpose: Outputs monthly report of user's transactions 
+// Parameters: 
+//      Input: Account Number, Account Name, Beginning Balance, Number Of Deposits, Deposits, Number Of Withdrawls, Withdrawls
+//		Input & Output: None 
+//		Output: None
+// Return Value: None
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
+void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls) 
+{
+	cout << "Name : " << AccountName << endl;
+	cout << "Account Number : " << AccountNumber << endl;
+	cout << "Beginning Balance : " << BeginningBalance << endl;
+	cout << "Ending Balance : " << (BeginningBalance - Withdrawls + Deposits) << endl;
+	cout << "Amount Deposited : " << Deposits << endl;
+	cout << "Number of Deposits : " << NumberOfDeposits << endl;
+	cout << "Amount Withdrawn : " << Withdrawls << endl;
+	cout << "Number of Withdrawls : " << NumberOfWithdrawls << endl;
+}
