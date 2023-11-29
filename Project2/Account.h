@@ -32,7 +32,10 @@ int GetAccountNumber(fstream AccountFile, // File where account information is
 					); // Gets account number
 string GetAccountName(fstream AccountFile, // File where account information is
 					  int AccountNumber // The account number assoicated with user
-					 );
+					  );
+int GetPreviousAccountBalance(fstream TransactionHistory, // Finds Transaction History
+					  		 int AccountNumber // Account Number of user
+							 ); // Returns Previous account Transaction History
 int GetDeposits(fstream TransactionHistory, // Finds Transaction History
 				int AccountNumber // Account Number of user
 			    ); // Returns sum of all withdrawls for a user
@@ -55,8 +58,8 @@ void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  int NumberOfWithdrawls, // Number of Deposits
 						  int Withdrawls // Sum of withdrawls
 						  ); // Outputs the monthly report
-int LinearSearch(int List[], 
-				int Size, 
-				int key // 
+int LinearSearch(int List[], // Array we are searching
+				int Size, // Size of Array
+				int Key // Key value we are searching for 
 				); // Searchs array for key value
 #endif
