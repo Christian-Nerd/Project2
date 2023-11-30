@@ -33,19 +33,19 @@ int GetAccountNumber(fstream& AccountFile, // File where account information is
 string GetAccountName(fstream& AccountFile, // File where account information is
 					  int AccountNumber // The account number assoicated with user
 					  );
-int GetPreviousAccountBalance(fstream& TransactionHistory, // Finds Transaction History
+double GetPreviousAccountBalance(fstream& TransactionHistory, // Finds Transaction History
 					  		 int AccountNumber // Account Number of user
 							 ); // Returns Previous account Transaction History
 int GetNumberOfDeposits(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Deposits
-int GetSumOfDeposits(fstream& TransactionHistory, // Finds Transaction History
+double GetSumOfDeposits(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number
 						  ); // Returns Sum of Deposits
 int GetNumberOfWithdrawls(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Withdrawls
-int GetSumOfWithdrawls(fstream& TrathnsactionHistory, // Finds Transaction History
+double GetSumOfWithdrawls(fstream& TrathnsactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number
 						  ); // Returns Sum of Withdrawls assoicated with user
 void OutputAccountHistory(int AccountNumber, // Account Number of user

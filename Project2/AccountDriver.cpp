@@ -16,9 +16,9 @@ int main()
 	// Initilize Variables
 	fstream AccountFile;  // File stream storing accounts
 	fstream TransactionFile; // File stream storing transactions
-	int UsedAccountNumbers[static_cast<int>(1e6)];
-	int AccountNumber; // Account Number
-	string AccountName = GetAccountName(AccountFile, AccountNumber); // Account Name
+	int UsedAccountNumbers[static_cast<int>(1e4)];
+	int AccountNumber = -1; // Account Number
+	string AccountName = ""; // Account Name
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
 	int SumOfDeposits; // Sum of all Deposits
 	int NumberOfDeposits; // Number of Deposits in user account
@@ -31,11 +31,12 @@ int main()
 	AccountNumber = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers);
 	cout <<  "" << !AccountFile; 
 	cout << "" << !TransactionFile;
+	AccountName = GetAccountName(AccountFile, AccountNumber);
+	PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
 	NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
 	SumOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
 	NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 	SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
-	PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
 	AccountFile.close();
 	TransactionFile.close();
 	OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls);

@@ -28,13 +28,13 @@ void GetAccountFile(fstream& File)
 	string FileName; // Stores file name
 	do
 	{
+		File.clear(); // When the file isn't opened and the loop runs again this allows operations to happen.
 		cout << "Please input account file path : ";
 		getline(cin, FileName); // Gets File Path from user
 		File.open(FileName.c_str(), ios::in);
 		if(!File)
 		{
 			cerr << "Invalid File Path!" << endl;
-			File.clear();
 			continue;
 		}
 	} while (!File);
@@ -58,13 +58,13 @@ void GetTransactionHistoryFile(fstream& File)
 	// Error Checking loop
 	do
 	{
+		File.clear(); // When the file isn't opened and the loop runs again this allows operations to happen.
 		cout << "Please input transaction history file path : ";
 		getline(cin, FileName); // Gets File Path from user
 		File.open(FileName.c_str(), ios::in);
 		if(!File)
 		{
 			cerr << "Invalid File Path!" << endl;
-			File.clear();
 			continue;
 		}
 	} 
@@ -93,7 +93,7 @@ int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNu
 	while (!AccountFile.eof())
 	{
 		// If the next string is an account number...
-		if (CurrentStreamCharacter == '\n' && isdigit(cin.peek()))
+		if (CurrentStreamCharacter == '\n' && isdigit(AccountFile.peek()))
 		{
 			// Checks if account number already processed if so you ignore 
 			if (LinearSearch(UsedAccountNumbers, NoOfNumsUsed, CurrentAccountNumber) >= 0)
@@ -112,6 +112,7 @@ int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNu
 				// since it the most recent one not previously used
 			}
 		}
+	    CurrentStreamCharacter = AccountFile.get(); // Finds next current stream character
 	}
 	AccountFile.seekg(ios::beg); // Set stream back to beginning
 	return -1;
@@ -149,6 +150,7 @@ string GetAccountName(fstream& AccountFile, int AccountNumber)
 				return AccountName;
 			}
 		}
+		CurrentStreamCharacter = AccountFile.get(); // Finds next current stream character
 	}
 	AccountFile.seekg(ios::beg); // Set stream back to beginning
 	return ""; // If account name not found return empty string.
@@ -165,18 +167,25 @@ string GetAccountName(fstream& AccountFile, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
+double GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initialize Variables
-	int PreviousAccountBalance; // Previous Account Balance
+	double PreviousAccountBalance; // Previous Account Balance
 	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
 	int CurrentAcccountNumber; // Checks for current account number to see if it's out account number
 	while (!TransactionHistory.eof()) 
 	{
 		// If the next string is the account number
-		if (CurrentStreamCharacter == '\n' && isdigit(TransactionHistory.peek())) 
+		if (CurrentStreamCharacter == '\n' || TransactionHistory.tellg() == 1 && isdigit(TransactionHistory.peek()))
 		{
-			TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
+			if (TransactionHistory.tellg() == 1)
+			{
+				TransactionHistory.putback(CurrentStreamCharacter);
+				TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
+			}
+			else
+				TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
+
 			if (CurrentAcccountNumber == AccountNumber) 
 			{
 				TransactionHistory >> PreviousAccountBalance; // Assigns previous account balance to a variable
@@ -184,6 +193,7 @@ int GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber)
 				return PreviousAccountBalance;
 			}
 		}
+		CurrentStreamCharacter = TransactionHistory.get(); // Finds next current stream character
 	}
 	return -1;
 }
@@ -231,7 +241,7 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 				}
 			}
 		}
-	    CurrentStreamCharacter = TransactionHistory.get(); 
+	    CurrentStreamCharacter = TransactionHistory.get(); // Finds next current stream character
 	}
 	return NumOfDeposits;
 }
@@ -248,7 +258,7 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
+double GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initilizes Variables
 	string Dummy = ""; // string variable to disgard Previous Account Balance 
@@ -281,7 +291,7 @@ int GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber)
 				}
 			}
 		}
-	    CurrentStreamCharacter = TransactionHistory.get(); 
+	    CurrentStreamCharacter = TransactionHistory.get(); // Finds next current stream character
 	}
 	return SumOfDeposits;
 }
@@ -346,12 +356,12 @@ int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
+double GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 {
 	// Initilizes Variables
 	string Dummy; // string variable to clear Previous Account Balance 
-	int CurrentWithdrawl; // Current withdrawl number 
-	int SumOfWithdrawls = 0; // Sum of Withdrawls 
+	double CurrentWithdrawl; // Current withdrawl number 
+	double SumOfWithdrawls = 0; // Sum of Withdrawls 
 	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
 	while (!TransactionHistory.eof())
 	{
@@ -369,6 +379,7 @@ int GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 					{
 						case 'w':
 							TransactionHistory >> CurrentWithdrawl; // Skips to next word;
+							SumOfWithdrawls += CurrentWithdrawl;
 							break;
 						default:
 							CurrentStreamCharacter = TransactionHistory.get(); 
@@ -377,9 +388,9 @@ int GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 				}
 			}
 		}
-	    CurrentStreamCharacter = TransactionHistory.get(); 
+	    CurrentStreamCharacter = TransactionHistory.get(); // Finds next current stream character
 	}
-	return 0;
+	return SumOfWithdrawls;
 }
 
 //*****************************************************************
