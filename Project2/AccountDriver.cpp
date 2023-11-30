@@ -34,6 +34,7 @@ int main()
 	AccountName = GetAccountName(AccountFile, AccountNumber);
 	PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
 	NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
+	cout << endl << "Number 0 : " << TransactionFile.fail() << endl;
 	SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
 	NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 	SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
