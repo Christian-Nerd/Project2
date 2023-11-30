@@ -3,8 +3,8 @@
 // Programmer: Trey Davis
 // Instructor: B.J Streller
 // Course: CS121
-// Date Created: 11/29/23
-// Date Modified: 11/29/23
+// Date Created: 11/30/23
+// Date Modified: 11/30/23
 // Input Files; File storing account listing in the form as shown in the pdf, File for transaction history
 // Output Files: monthly_report.txt stores monthly report
 // Modules Used: idk
@@ -25,21 +25,23 @@ int main()
 	int SumOfWithdrawls; // Sum of all Withdrawls
 	int NumberOfWithdrawls; // Number of Withdrawls in user account
 	int PreviousAccountBalance; // Starting balance at beginning of month
-	// Initilizing with functions
-	GetAccountFile(AccountFile); // Putting account file in the stream
-	GetTransactionHistoryFile(TransactionFile); // Putting transactions file in the stream
-	AccountNumber = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers);
-	cout <<  "" << !AccountFile; 
-	cout << "" << !TransactionFile;
-	AccountName = GetAccountName(AccountFile, AccountNumber);
-	PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
-	NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
-	cout << endl << "Number 0 : " << TransactionFile.fail() << endl;
-	SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
-	NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
-	SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
-	AccountFile.close();
-	TransactionFile.close();
-	OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls);
+	// Initilizing values with functions and outputting the report for each user
+	while (IsThereDifferentAccounts(AccountFile, UsedAccountNumbers))
+	{
+		GetAccountFile(AccountFile); // Putting account file in the stream
+		GetTransactionHistoryFile(TransactionFile); // Putting transactions file in the stream
+		AccountNumber = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers);
+		AccountName = GetAccountName(AccountFile, AccountNumber);
+		PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
+		NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
+		SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
+		NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
+		SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
+		AccountFile.close();
+		TransactionFile.close();
+		OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls);
+		UsedAccountNumbers[NoOfUsedAccountNumbers++] = AccountNumber; // Adds Account Number to the array
+		// and iterates on NoOfUsedAccountNumbers
+	}
 	return 0;
 }

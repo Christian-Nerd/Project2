@@ -231,7 +231,6 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 			else
 				TransactionHistory >> CurrentAccountNumber;
 		}
-		cout << CurrentAccountNumber.compare(to_string(AccountNumber));
 		if (CurrentAccountNumber.compare(to_string(AccountNumber)) == 0)
 		{
 			switch (tolower(CurrentStreamCharacter))
@@ -417,6 +416,46 @@ double GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 	return SumOfWithdrawls;
 }
 
+
+//*****************************************************************
+// Function Name: IsThereDifferentAccounts
+// Purpose: Checks if there is any unused account numbers left in the inputted Account file
+// Parameters:
+//		Input: Account File, Array containing all previously used account numbers, along with it's size
+//		Input & Output: None
+//		Output: None
+// Return Value: Whether or not there is any unused account numbers left in the inputted Account File
+// Non-local Variables Used: None
+// Functions Called: None
+//*****************************************************************
+bool IsThereDifferentAccounts(fstream AccountFile, int UsedAccountNumbers[], int NoOfUsedAccountNumbers) 
+{
+	// Initilize Variables 
+	char CurrentStreamCharacter = ' '; // The current character in the stream
+	int CurrentAccountNumber = -1;
+	// Checks for unused account numbers while AcconutFile is still good
+	while ((CurrentStreamCharacter = AccountFile.get()) && AccountFile)
+	{
+		if ((CurrentStreamCharacter == '\n' || AccountFile.tellg() == 1) && isdigit((unsigned char)AccountFile.peek())) 
+		{
+			if (AccountFile.tellg() == 1)
+			{
+				AccountFile.putback(CurrentStreamCharacter);
+				AccountFile >> CurrentAccountNumber;
+			}
+			else
+				AccountFile >> CurrentAccountNumber;
+		}
+		// Checks if CurrentAccountNumber in list and returns it if so
+		if (LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) > -1) 
+		{
+			return true;
+		}
+
+	}
+	return false;
+}
+
 //*****************************************************************
 // Function Name: LinearSearch
 // Purpose: Gets & returns Element in an array if it's not there returns -1
@@ -455,13 +494,20 @@ void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBa
 {
 	ofstream Report;
 	string FileName = "monthly_report.txt";
-	Report.open(FileName.c_str(), ios::in);
+	Report.open(FileName.c_str(), ios::out);
 	cout << "Name : " << AccountName << endl;
+	Report << "Name : " << AccountName << endl;
 	cout << "Account Number : " << AccountNumber << endl;
+	Report << "Account Number : " << AccountNumber << endl;
 	cout << "Beginning Balance : " << BeginningBalance << endl;
+	Report << "Beginning Balance : " << BeginningBalance << endl;
 	cout << "Ending Balance : " << (BeginningBalance - Withdrawls + Deposits) << endl;
+	Report << "Ending Balance : " << (BeginningBalance - Withdrawls + Deposits) << endl;
 	cout << "Amount Deposited : " << Deposits << endl;
 	cout << "Number of Deposits : " << NumberOfDeposits << endl;
+	Report << "Number of Deposits : " << NumberOfDeposits << endl;
 	cout << "Amount Withdrawn : " << Withdrawls << endl;
+	Report << "Amount Withdrawn : " << Withdrawls << endl;
 	cout << "Number of Withdrawls : " << NumberOfWithdrawls << endl;
+	Report << "Number of Withdrawls : " << NumberOfWithdrawls << endl;
 }

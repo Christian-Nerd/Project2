@@ -56,6 +56,10 @@ void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  int NumberOfWithdrawls, // Number of Deposits
 						  int Withdrawls // Sum of withdrawls
 						  ); // Outputs the monthly report
+bool IsThereDifferentAccounts(fstream AccountFile, // File containing account numbers
+						      int UsedAccountNumbers[], // Array containing all used account numbers
+							  int NoOfUsedAccountNumbers // Size of array
+							); // Checks if there are any used account numbers
 int LinearSearch(int List[], // Array we are searching
 				int Size, // Size of Array
 				int Key // Key value we are searching for 
