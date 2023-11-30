@@ -3,7 +3,7 @@
 // Programmer: Trey Davis
 // Instructor: B.J. Streller
 // Course: CS121
-// Date: 11/28/23
+// Date: 11/29/23
 // Program Name: Account.h
 // Input Files: None
 // Output Files: None
@@ -24,28 +24,28 @@ struct Account
 	string name; // Name of person with account
 	int acct_val; // Current net account value
 };
-void GetAccountFile(fstream File); // Finds account file name and error checks if it's accurate then opens it
-void GetTransactionHistoryFile(fstream File); // Finds Transaction History file name and error checks if it's accurate then opens it
-int GetAccountNumber(fstream AccountFile, // File where account information is
+void GetAccountFile(fstream& File); // Finds account file name and error checks if it's accurate then opens it
+void GetTransactionHistoryFile(fstream& File); // Finds Transaction History file name and error checks if it's accurate then opens it
+int GetAccountNumber(fstream& AccountFile, // File where account information is
 				   	  int UsedAccountNumbers[], // Previously used account numbers
 				  	  int &NoOfNumsUsed // How many used numbers in array
 					); // Gets account number
-string GetAccountName(fstream AccountFile, // File where account information is
+string GetAccountName(fstream& AccountFile, // File where account information is
 					  int AccountNumber // The account number assoicated with user
 					  );
-int GetPreviousAccountBalance(fstream TransactionHistory, // Finds Transaction History
+int GetPreviousAccountBalance(fstream& TransactionHistory, // Finds Transaction History
 					  		 int AccountNumber // Account Number of user
 							 ); // Returns Previous account Transaction History
-int GetNumberOfDeposits(fstream TransactionHistory, // Finds Transaction History
+int GetNumberOfDeposits(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Deposits
-int GetSumOfDeposits(fstream TransactionHistory, // Finds Transaction History
+int GetSumOfDeposits(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number
 						  ); // Returns Sum of Deposits
-int GetNumberOfWithdrawls(fstream TransactionHistory, // Finds Transaction History
+int GetNumberOfWithdrawls(fstream& TransactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number of user
 						  ); // Returns Number of Withdrawls
-int GetSumOfWithdrawls(fstream TrathnsactionHistory, // Finds Transaction History
+int GetSumOfWithdrawls(fstream& TrathnsactionHistory, // Finds Transaction History
 						  int AccountNumber // Account Number
 						  ); // Returns Sum of Withdrawls assoicated with user
 void OutputAccountHistory(int AccountNumber, // Account Number of user

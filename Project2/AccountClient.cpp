@@ -23,28 +23,21 @@
 // Non-local Variables Used: None
 // Functions Called: std::string::push_back(), std::string::getline(), 
 //*****************************************************************
-void GetAccountFile(fstream File) 
+void GetAccountFile(fstream& File) 
 {
 	string FileName; // Stores file name
-	while (!File)
+	do
 	{
 		cout << "Please input account file path : ";
 		getline(cin, FileName); // Gets File Path from user
-		File.open(FileName.c_str());
+		File.open(FileName.c_str(), ios::in);
 		if(!File)
 		{
 			cerr << "Invalid File Path!" << endl;
 			File.clear();
+			continue;
 		}
-	}
-	/*
-	char CurrentStreamCharacter = cin.get(); // Current Character in the input stream
-	while (CurrentStreamCharacter == '\n') 
-	{
-		FileName.push_back(CurrentStreamCharacter); // Adds character to file name
-	    CurrentStreamCharacter = cin.get(); // Current Character in the input stream
-	}
-	*/
+	} while (!File);
 	
 }
 
@@ -59,29 +52,23 @@ void GetAccountFile(fstream File)
 // Non-local Variables Used: None
 // Functions Called: std::string::push_back(), std::string::getline(),  std::c_str(), fstream::open()
 //*****************************************************************
-void GetTransactionHistoryFile(fstream File) 
+void GetTransactionHistoryFile(fstream& File) 
 {
 	string FileName; // Stores file name
 	// Error Checking loop
-	while (!cin)
+	do
 	{
 		cout << "Please input transaction history file path : ";
 		getline(cin, FileName); // Gets File Path from user
-		File.open(FileName.c_str());
+		File.open(FileName.c_str(), ios::in);
 		if(!File)
 		{
 			cerr << "Invalid File Path!" << endl;
 			File.clear();
+			continue;
 		}
-	}
-	/*
-	char CurrentStreamCharacter = cin.get(); // Current Character in the input stream
-	while (CurrentStreamCharacter == '\n') 
-	{
-		FileName.push_back(CurrentStreamCharacter); // Adds character to file name
-	    CurrentStreamCharacter = cin.get(); // Current Character in the input stream
-	}
-	*/
+	} 
+	while (!File);
 	cout << endl;
 	
 }
@@ -97,7 +84,7 @@ void GetTransactionHistoryFile(fstream File)
 // Non-local Variables Used: None
 // Functions Called: std::number_limits<streamsize>::max, std::isdigit
 //*****************************************************************
-int GetAccountNumber(fstream AccountFile, int UsedAccountNumbers[], int &NoOfNumsUsed) 
+int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNumsUsed) 
 {
 	//Initilizes Variables
 	int CurrentAccountNumber = -1; // Potential Account Number
@@ -141,7 +128,7 @@ int GetAccountNumber(fstream AccountFile, int UsedAccountNumbers[], int &NoOfNum
 // Non-local Variables Used: None
 // Functions Called: std::isdigit
 //*****************************************************************
-string GetAccountName(fstream AccountFile, int AccountNumber) 
+string GetAccountName(fstream& AccountFile, int AccountNumber) 
 {
 	// Initilizes Variables
 	string AccountName; // Account name assoicated with user
@@ -178,7 +165,7 @@ string GetAccountName(fstream AccountFile, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetPreviousAccountBalance(fstream TransactionHistory, int AccountNumber) 
+int GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initialize Variables
 	int PreviousAccountBalance; // Previous Account Balance
@@ -212,7 +199,7 @@ int GetPreviousAccountBalance(fstream TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetNumberOfDeposits(fstream TransactionHistory, int AccountNumber) 
+int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initilizes Variables
 	string Dummy; // string variable to clear Previous Account Balance 
@@ -261,7 +248,7 @@ int GetNumberOfDeposits(fstream TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetSumOfDeposits(fstream TransactionHistory, int AccountNumber) 
+int GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initilizes Variables
 	string Dummy = ""; // string variable to disgard Previous Account Balance 
@@ -310,7 +297,7 @@ int GetSumOfDeposits(fstream TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetNumberOfWithdrawls(fstream TransactionHistory, int AccountNumber) 
+int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initilizes Variables
 	string Dummy; // string variable to clear Previous Account Balance 
@@ -359,7 +346,7 @@ int GetNumberOfWithdrawls(fstream TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-int GetSumOfWithdrawls(fstream TransactionHistory, int AccountNumber)
+int GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 {
 	// Initilizes Variables
 	string Dummy; // string variable to clear Previous Account Balance 
@@ -431,6 +418,9 @@ int LinearSearch(int List[], int Size, int Key)
 //*****************************************************************
 void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls) 
 {
+	ofstream Report;
+	string FileName = "monthly_report.txt";
+	Report.open(FileName.c_str(), ios::in);
 	cout << "Name : " << AccountName << endl;
 	cout << "Account Number : " << AccountNumber << endl;
 	cout << "Beginning Balance : " << BeginningBalance << endl;
