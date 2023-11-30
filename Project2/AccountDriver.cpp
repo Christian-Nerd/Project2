@@ -34,7 +34,7 @@ int main()
 	AccountName = GetAccountName(AccountFile, AccountNumber);
 	PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
 	NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
-	SumOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
+	SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
 	NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 	SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
 	AccountFile.close();
