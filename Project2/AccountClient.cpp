@@ -90,22 +90,24 @@ int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNu
 	int CurrentAccountNumber = -1; // Potential Account Number
 	char CurrentStreamCharacter = AccountFile.get(); // Finds current stream character
 	// Until end of file checks for an unused account number
-	while (!AccountFile.eof())
+	while (!AccountFile.fail())
 	{
 		// If the next string is an account number...
 		if (CurrentStreamCharacter == '\n' && isdigit(AccountFile.peek()))
 		{
+			AccountFile >> CurrentAccountNumber; // Gets current account number
 			// Checks if account number already processed if so you ignore 
 			if (LinearSearch(UsedAccountNumbers, NoOfNumsUsed, CurrentAccountNumber) >= 0)
 			{
+				CurrentAccountNumber = -1;
 				AccountFile.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignores line completely
+				AccountFile.putback('\n');
 				continue;
 			}
 			else
 			{
-				AccountFile >> CurrentAccountNumber;
-				UsedAccountNumbers[NoOfNumsUsed++]; // Iterate Number of Numbers used  
-				// & add AccountNumber tosedAccountNumbers before 
+				UsedAccountNumbers[NoOfNumsUsed++] = CurrentAccountNumber; // Iterate Number of Numbers used  
+				// & add AccountNumber toUsedAccountNumbers before 
 				// NoOfNumbers is iterated
 				AccountFile.seekg(ios::beg); // Set stream back to beginning
 				return CurrentAccountNumber; // Returns the account number 
@@ -167,10 +169,10 @@ string GetAccountName(fstream& AccountFile, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-double GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
+float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Initialize Variables
-	double PreviousAccountBalance; // Previous Account Balance
+	float PreviousAccountBalance; // Previous Account Balance
 	char CurrentStreamCharacter = TransactionHistory.get(); // Finds current stream character
 	int CurrentAcccountNumber; // Checks for current account number to see if it's out account number
 	while (!TransactionHistory.eof()) 
@@ -216,11 +218,13 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 	// Initilizes Variables
 	string Dummy; // string variable to clear Previous Account Balance 
 	string CurrentAccountNumber; // Stores current account number
-	int NumOfDeposits = 0;
+	float NumOfDeposits = 0;
 	// and check if you find account number from stream
 	char CurrentStreamCharacter = ' '; // Finds current stream character
+	char NextStreamCharacter; // Debugging variable
 	while((CurrentStreamCharacter = TransactionHistory.get()) && TransactionHistory) 
 	{
+		NextStreamCharacter = TransactionHistory.peek(); // Puts next character into NextStreamCharacter
 		if ((CurrentStreamCharacter == '\n' || TransactionHistory.tellg() == 1) && (isdigit((unsigned char)TransactionHistory.peek())))
 		{
 			if (TransactionHistory.tellg() == 1) 
@@ -233,7 +237,7 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 		}
 		if (CurrentAccountNumber.compare(to_string(AccountNumber)) == 0)
 		{
-			switch (tolower(CurrentStreamCharacter))
+ 			switch (tolower(CurrentStreamCharacter))
 			{
 				case 'd':
 					NumOfDeposits++;
@@ -243,7 +247,6 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 			}
 		}
 	}
-	cout << "Number 1 : " << TransactionHistory.fail() << endl;
 	TransactionHistory.clear(); // Clears any errors
 	TransactionHistory.seekg(ios_base::beg); // Returns stream to beginning
 	return NumOfDeposits;
@@ -261,15 +264,16 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-double GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
+float GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
 	// Intitilize Variables
 	string CurrentAccountNumber = ""; // Current account number gotten
 	char CurrentStreamCharacter = ' '; // Current Character in the stream
 	string Dummy = ""; // Dummy variable to clear Previous Balance
-	double CurrentDeposite = 0; // Current Deposite in stream
-	double SumOfDeposits = 0; // Sum of all deposits
+	float CurrentDeposite = 0; // Current Deposite in stream
+	float SumOfDeposits = 0; // Sum of all deposits
 	// Goes thru to find deposits as long as input/stream is valid
+
 	while ((CurrentStreamCharacter = TransactionHistory.get()) && TransactionHistory) 
 	{
 		// If account number found assign it to currentaccountnumber and get rid of the previous balance from stream
@@ -295,12 +299,12 @@ double GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber)
 					SumOfDeposits += CurrentDeposite;
 					break;
 
-				case '\n':
-					return SumOfDeposits;
-					break;
-
 				default: 
 					continue;
+			}
+			if (TransactionHistory.peek() == '\n')
+			{
+				return SumOfDeposits;
 			}
 		}
 
@@ -376,13 +380,13 @@ int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-double GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
+float GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 {
 	// Initilizes Variables
 	string Dummy = ""; // string variable to clear Previous Account Balance 
 	string CurrentAccountNumber = ""; // Stores current account number
-	double CurrentWithdrawl = 0; // Current withdrawl number 
-	double SumOfWithdrawls = 0; // Sum of Withdrawls 
+	float CurrentWithdrawl = 0; // Current withdrawl number 
+	float SumOfWithdrawls = 0; // Sum of Withdrawls 
 	char CurrentStreamCharacter = ' '; // Finds current stream character
 	while((CurrentStreamCharacter = TransactionHistory.get()) && TransactionHistory) 
 	{
@@ -428,11 +432,11 @@ double GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-bool IsThereDifferentAccounts(fstream AccountFile, int UsedAccountNumbers[], int NoOfUsedAccountNumbers) 
+bool IsThereDifferentAccounts(fstream& AccountFile, int UsedAccountNumbers[], int NoOfUsedAccountNumbers) 
 {
 	// Initilize Variables 
 	char CurrentStreamCharacter = ' '; // The current character in the stream
-	int CurrentAccountNumber = -1;
+	int CurrentAccountNumber = -2;
 	// Checks for unused account numbers while AcconutFile is still good
 	while ((CurrentStreamCharacter = AccountFile.get()) && AccountFile)
 	{
@@ -447,14 +451,21 @@ bool IsThereDifferentAccounts(fstream AccountFile, int UsedAccountNumbers[], int
 				AccountFile >> CurrentAccountNumber;
 		}
 		// Checks if CurrentAccountNumber in list and returns it if so
-		if (LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) > -1) 
+		if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) == -1)) 
 		{
+			AccountFile.clear(); // Clears any errors
+			AccountFile.seekg(ios::beg); // Sends string to the beginning
 			return true;
 		}
 
 	}
-	return false;
-}
+	if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) > -1))
+	{
+		AccountFile.clear(); // Clears any errors		
+		AccountFile.seekg(ios::beg); // Sends string to the beginning
+		return false;
+	}
+ }
 
 //*****************************************************************
 // Function Name: LinearSearch
@@ -485,16 +496,17 @@ int LinearSearch(int List[], int Size, int Key)
 // Parameters: 
 //      Input: Account Number, Account Name, Beginning Balance, Number Of Deposits, Deposits, Number Of Withdrawls, Withdrawls
 //		Input & Output: None 
-//		Output: None
+//		Output: File which stores the output
 // Return Value: None
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls) 
+void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls, ofstream Report) 
 {
-	ofstream Report;
-	string FileName = "monthly_report.txt";
-	Report.open(FileName.c_str(), ios::out);
+	// Sets flags on output streams
+	cout << setprecision(2) << fixed;
+	Report << setprecision(2) << fixed;
+	// Outputs monthly report
 	cout << "Name : " << AccountName << endl;
 	Report << "Name : " << AccountName << endl;
 	cout << "Account Number : " << AccountNumber << endl;
@@ -510,4 +522,6 @@ void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBa
 	Report << "Amount Withdrawn : " << Withdrawls << endl;
 	cout << "Number of Withdrawls : " << NumberOfWithdrawls << endl;
 	Report << "Number of Withdrawls : " << NumberOfWithdrawls << endl;
+	cout << endl;
+	Report << endl;
 }

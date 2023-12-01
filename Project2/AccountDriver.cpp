@@ -16,7 +16,10 @@ int main()
 	// Initilize Variables
 	fstream AccountFile;  // File stream storing accounts
 	fstream TransactionFile; // File stream storing transactions
-	int UsedAccountNumbers[static_cast<int>(1e4)];
+	ofstream Report; // Output File
+	string FileName = "monthly_report.txt"; 
+	Report.open(FileName.c_str(), ios::out); 
+	int UsedAccountNumbers[static_cast<int>(2e3)];
 	int AccountNumber = -1; // Account Number
 	string AccountName = ""; // Account Name
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
@@ -26,10 +29,13 @@ int main()
 	int NumberOfWithdrawls; // Number of Withdrawls in user account
 	int PreviousAccountBalance; // Starting balance at beginning of month
 	// Initilizing values with functions and outputting the report for each user
-	while (IsThereDifferentAccounts(AccountFile, UsedAccountNumbers))
+	GetAccountFile(AccountFile); // Putting account file in the stream
+	while (IsThereDifferentAccounts(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers))
 	{
-		GetAccountFile(AccountFile); // Putting account file in the stream
-		GetTransactionHistoryFile(TransactionFile); // Putting transactions file in the stream
+		if(!AccountFile.is_open())
+			GetAccountFile(AccountFile); // Putting account file in the stream again for user
+		if(!TransactionFile.is_open())
+			GetTransactionHistoryFile(TransactionFile); // Putting transactions file in the stream
 		AccountNumber = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers);
 		AccountName = GetAccountName(AccountFile, AccountNumber);
 		PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
@@ -37,11 +43,9 @@ int main()
 		SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
 		NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 		SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
-		AccountFile.close();
-		TransactionFile.close();
 		OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls);
-		UsedAccountNumbers[NoOfUsedAccountNumbers++] = AccountNumber; // Adds Account Number to the array
-		// and iterates on NoOfUsedAccountNumbers
 	}
+	AccountFile.close();
+	TransactionFile.close();
 	return 0;
 }

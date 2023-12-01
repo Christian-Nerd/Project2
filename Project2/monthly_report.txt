@@ -1,7 +1,0 @@
-Name : daffy
-Account Number : 123
-Beginning Balance : 34
-Ending Balance : 283
-Number of Deposits : 3
-Amount Withdrawn : 45
-Number of Withdrawls : 1
