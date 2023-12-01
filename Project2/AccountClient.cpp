@@ -3,8 +3,8 @@
 // Programmer: Trey Davis
 // Instructor: B.J Streller
 // Course: CS121
-// Date Created: 11/29/23
-// Date Modified: 11/29/23
+// Date Created: 12/1/23
+// Date Modified: 12/1/23
 // Input Files; File storing account listing in the form as shown in the pdf, File for transaction history
 // Output Files: monthly_report.txt stores monthly report
 // Modules: idk
@@ -73,6 +73,35 @@ void GetTransactionHistoryFile(fstream& File)
 	
 }
 
+//*****************************************************************
+// Function Name: GetOutputFile
+// Purpose: Gets Output File filepath from user and error checks if it's right then opens it
+// Parameters:
+//		Input: Output File
+//		Input & Output: None
+//		Output: None
+// Return Value: None
+// Non-local Variables Used: None
+// Functions Called: std::string::push_back(), std::string::getline(),  std::c_str(), fstream::open()
+//*****************************************************************
+void GetOutputFile(ofstream& File) 
+{
+	string FileName; // Stores file name
+	// Error Checking loop
+	do
+	{
+		File.clear(); // When the file isn't opened and the loop runs again this allows operations to happen.
+		cout << "Please input output file path : ";
+		getline(cin, FileName); // Gets File Path from user
+		File.open(FileName.c_str(), ios::out);
+		if (!File)
+		{
+			cerr << "Invalid File Path!" << endl;
+			continue;
+		}
+	} while (!File);
+	cout << endl;
+}
 //*****************************************************************
 // Function Name: GetAccountNumber
 // Purpose: Gets & returns account number from account file
@@ -167,7 +196,7 @@ string GetAccountName(fstream& AccountFile, int AccountNumber)
 //		Output: None
 // Return Value: Number of deposits assoicated with users
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: fstream::eof, istream::tellg, istream:: putback, istream::seekg, istream:::get, std::isdigit, ios::clear
 //*****************************************************************
 float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
 {
@@ -211,7 +240,7 @@ float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber)
 //		Output: None
 // Return Value: Number of deposits assoicated with users
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: fstream::eof, istream::tellg, istream:: putback, istream::seekg, istream:::get, std::isdigit, ios::clear, std::string::compare, istream::peek
 //*****************************************************************
 int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
@@ -262,7 +291,7 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
 //		Output: None
 // Return Value: Sum of all deposits 
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: fstream::eof, istream::tellg, istream:: putback, istream::seekg, istream:::get, std::isdigit, ios::clear, std::string::compare, istream::peek
 //*****************************************************************
 float GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber) 
 {
@@ -323,7 +352,7 @@ float GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber)
 //		Output: None
 // Return Value: Number of Withdrawls a user made 
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: fstream::eof, istream::tellg, istream:: putback, istream::seekg, istream:::get, std::isdigit, ios::clear, std::tolower, std::string::compare, istream::peek
 //*****************************************************************
 int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber) 
 {
@@ -378,7 +407,7 @@ int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 //		Output: None
 // Return Value: Sum of all withdrawls 
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: fstream::eof, istream::tellg, istream:: putback, istream::seekg, istream:::get, std::isdigit, ios::clear, std::tolower, std::string::compare, istream::peek
 //*****************************************************************
 float GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 {
@@ -430,14 +459,15 @@ float GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 //		Output: None
 // Return Value: Whether or not there is any unused account numbers left in the inputted Account File
 // Non-local Variables Used: None
-// Functions Called: None
+// Functions Called: ios::clear, istream::seekg, istream::tellg, istream::putback, std::isdigit, istream::peek
 //*****************************************************************
 bool IsThereDifferentAccounts(fstream& AccountFile, int UsedAccountNumbers[], int NoOfUsedAccountNumbers) 
 {
 	// Initilize Variables 
 	char CurrentStreamCharacter = ' '; // The current character in the stream
-	int CurrentAccountNumber = -2;
+	int CurrentAccountNumber = -2; // Number that represents the current account number(set to a default that won't screw everything up)
 	// Checks for unused account numbers while AcconutFile is still good
+	// While the file is still good and input is valid check if there are any different account numbers
 	while ((CurrentStreamCharacter = AccountFile.get()) && AccountFile)
 	{
 		if ((CurrentStreamCharacter == '\n' || AccountFile.tellg() == 1) && isdigit((unsigned char)AccountFile.peek())) 
@@ -465,6 +495,7 @@ bool IsThereDifferentAccounts(fstream& AccountFile, int UsedAccountNumbers[], in
 		AccountFile.seekg(ios::beg); // Sends string to the beginning
 		return false;
 	}
+	return false;
  }
 
 //*****************************************************************
@@ -501,7 +532,7 @@ int LinearSearch(int List[], int Size, int Key)
 // Non-local Variables Used: None
 // Functions Called: None
 //*****************************************************************
-void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls, ofstream Report) 
+void OutputAccountHistory(int AccountNumber, string AccountName, int BeginningBalance, int NumberOfDeposits, int Deposits, int NumberOfWithdrawls, int Withdrawls, ofstream& Report) 
 {
 	// Sets flags on output streams
 	cout << setprecision(2) << fixed;

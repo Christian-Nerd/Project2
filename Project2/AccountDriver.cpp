@@ -17,19 +17,19 @@ int main()
 	fstream AccountFile;  // File stream storing accounts
 	fstream TransactionFile; // File stream storing transactions
 	ofstream Report; // Output File
-	string FileName = "monthly_report.txt"; 
-	Report.open(FileName.c_str(), ios::out); 
 	int UsedAccountNumbers[static_cast<int>(2e3)];
 	int AccountNumber = -1; // Account Number
 	string AccountName = ""; // Account Name
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
-	int SumOfDeposits; // Sum of all Deposits
+	float SumOfDeposits; // Sum of all Deposits
 	int NumberOfDeposits; // Number of Deposits in user account
-	int SumOfWithdrawls; // Sum of all Withdrawls
+	float SumOfWithdrawls; // Sum of all Withdrawls
 	int NumberOfWithdrawls; // Number of Withdrawls in user account
-	int PreviousAccountBalance; // Starting balance at beginning of month
+	float PreviousAccountBalance; // Starting balance at beginning of month
 	// Initilizing values with functions and outputting the report for each user
 	GetAccountFile(AccountFile); // Putting account file in the stream
+	GetOutputFile(Report); // Opens output file
+	// Outputs the report for each user looping as long as there are different account numbers
 	while (IsThereDifferentAccounts(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers))
 	{
 		if(!AccountFile.is_open())
@@ -43,9 +43,11 @@ int main()
 		SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
 		NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 		SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
-		OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls);
+		OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls, Report);
 	}
+	// Closes all files used
 	AccountFile.close();
 	TransactionFile.close();
+	Report.close();
 	return 0;
 }

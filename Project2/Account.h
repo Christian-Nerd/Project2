@@ -25,8 +25,12 @@ struct Account
 	string name; // Name of person with account
 	int acct_val; // Current net account value
 };
-void GetAccountFile(fstream& File); // Finds account file name and error checks if it's accurate then opens it
-void GetTransactionHistoryFile(fstream& File); // Finds Transaction History file name and error checks if it's accurate then opens it
+void GetAccountFile(fstream& File // Account File
+				    ); // Finds account file name and error checks if it's accurate then opens it
+void GetTransactionHistoryFile(fstream& File // Transaction File
+							   ); // Finds Transaction History file name and error checks if it's accurate then opens it
+void GetOutputFile(ofstream& File // Output File
+				   ); // Finds Output File Name than error checks if it's accurate then opens it.
 int GetAccountNumber(fstream& AccountFile, // File where account information is
 				   	  int UsedAccountNumbers[], // Previously used account numbers
 				  	  int &NoOfNumsUsed // How many used numbers in array
@@ -56,7 +60,7 @@ void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  int Deposits, // Sum of all deposits
 						  int NumberOfWithdrawls, // Number of Deposits
 						  int Withdrawls, // Sum of withdrawls
-						  ofstream Report // Monthly report file to output to
+						  ofstream& Report // Monthly report file to output to
 						  ); // Outputs the monthly report
 bool IsThereDifferentAccounts(fstream& AccountFile, // File containing account numbers
 						      int UsedAccountNumbers[], // Array containing all used account numbers
