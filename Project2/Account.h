@@ -16,8 +16,9 @@
 #include<iostream> // For regular i/o manipulation
 #include<iomanip> // For setprecision
 #include<stdio.h> // Streller you said include this
-#ifndef Account.h
-#define Account
+#pragma once
+#ifndef ACCOUNT_H
+#define ACCOUNT_H
 using namespace std;
 struct Account
 {
@@ -55,18 +56,18 @@ float GetSumOfWithdrawls(fstream& TrathnsactionHistory, // Finds Transaction His
 						  ); // Returns Sum of Withdrawls assoicated with user
 void OutputAccountHistory(int AccountNumber, // Account Number of user
 						  string AccountName, // Account name assoicated with user
-						  int BeginningBalance, // Balance at start of month
+						  float BeginningBalance, // Balance at start of month
 					      int NumberOfDeposits, // Number of Deposits by user 
-						  int Deposits, // Sum of all deposits
+						  float Deposits, // Sum of all deposits
 						  int NumberOfWithdrawls, // Number of Deposits
-						  int Withdrawls, // Sum of withdrawls
+						  float Withdrawls, // Sum of withdrawls
 						  ofstream& Report // Monthly report file to output to
 						  ); // Outputs the monthly report
 bool IsThereDifferentAccounts(fstream& AccountFile, // File containing account numbers
 						      int UsedAccountNumbers[], // Array containing all used account numbers
 							  int NoOfUsedAccountNumbers // Size of array
 							); // Checks if there are any used account numbers
-int LinearSearch(int List[], // Array we are searching
+int LinearSearch(int const List[], // Array we are searching
 				int Size, // Size of Array
 				int Key // Key value we are searching for 
 				); // Searchs array for key value

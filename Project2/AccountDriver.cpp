@@ -43,7 +43,11 @@ int main()
 		SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
 		NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
 		SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
-		OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls, Report);
+		// If there's no account name continue else Output the report
+		if (AccountName.compare("") == 0)
+			continue;
+		else
+			OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls, Report);
 	}
 	// Closes all files used
 	AccountFile.close();

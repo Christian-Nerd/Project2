@@ -1,0 +1,40 @@
+Name : fanny
+Account Number : 55
+Beginning Balance : 2000.00
+Ending Balance : 3615.00
+Number of Deposits : 5
+Amount Withdrawn : 0.00
+Number of Withdrawls : 3
+
+Name : ronald
+Account Number : 66
+Beginning Balance : 1000.00
+Ending Balance : 1800.00
+Number of Deposits : 2
+Amount Withdrawn : 0.00
+Number of Withdrawls : 4
+
+Name : kite
+Account Number : 89
+Beginning Balance : 20000.00
+Ending Balance : 21281.00
+Number of Deposits : 2
+Amount Withdrawn : 0.00
+Number of Withdrawls : 0
+
+Name : donald
+Account Number : 98
+Beginning Balance : 92731.00
+Ending Balance : 102940.00
+Number of Deposits : 3
+Amount Withdrawn : 0.00
+Number of Withdrawls : 0
+
+Name : john
+Account Number : 100
+Beginning Balance : 7820.00
+Ending Balance : 8802.00
+Number of Deposits : 1
+Amount Withdrawn : 0.00
+Number of Withdrawls : 2
+
