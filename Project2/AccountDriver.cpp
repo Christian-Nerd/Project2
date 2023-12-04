@@ -13,43 +13,45 @@
 #include "Account.h"
 int main() 
 {
-	// Initilize Variables
+	// Initialize Variables
 	fstream AccountFile;  // File stream storing accounts
 	fstream TransactionFile; // File stream storing transactions
 	ofstream Report; // Output File
-	int UsedAccountNumbers[static_cast<int>(2e3)];
-	int AccountNumber = -1; // Account Number  sets default to "" to check for changes to it
-	string AccountName = ""; // Account Name
+	int UsedAccountNumbers[static_cast<int>(2e3)]; // Array that stores previously used account numbers
+    Account Accounts[static_cast<int>(2e3)]; // Array that stores users
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
 	float SumOfDeposits; // Sum of all Deposits
 	int NumberOfDeposits; // Number of Deposits in user account
-	float SumOfWithdrawls; // Sum of all Withdrawls
-	int NumberOfWithdrawls; // Number of Withdrawls in user account
+	float SumOfWithdrawals; // Sum of all Withdrawals
+	int NumberOfWithdrawals; // Number of Withdrawals in user account
 	float PreviousAccountBalance; // Starting balance at beginning of month
-	// Initilizing values with functions and outputting the report for each user
+	// Initializing values with functions and outputting the report for each user
 	GetAccountFile(AccountFile); // Putting account file in the stream
 	GetOutputFile(Report); // Opens output file
 	// Outputs the report for each user looping as long as there are different account numbers
 	while (IsThereDifferentAccounts(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers))
 	{
+        Account User = Accounts[NoOfUsedAccountNumbers]; // This variable is an alias for Accounts[NoOfUsedAccountNumbers]
+        User.acct_num = -1; // User's account number initialized to impossible value
+        User.name.clear(); // Makes string empty initially
 		if(!AccountFile.is_open())
 			GetAccountFile(AccountFile); // Putting account file in the stream again for user
 		if(!TransactionFile.is_open())
 			GetTransactionHistoryFile(TransactionFile); // Putting transactions file in the stream
-		AccountNumber = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers);
-		AccountName = GetAccountName(AccountFile, AccountNumber);
-		PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, AccountNumber);
-		NumberOfDeposits = GetNumberOfDeposits(TransactionFile, AccountNumber);
-		SumOfDeposits = GetSumOfDeposits(TransactionFile, AccountNumber);
-		NumberOfWithdrawls = GetNumberOfWithdrawls(TransactionFile, AccountNumber);
-		SumOfWithdrawls = GetSumOfWithdrawls(TransactionFile, AccountNumber);
+		User.acct_num = GetAccountNumber(AccountFile, UsedAccountNumbers, NoOfUsedAccountNumbers); // Sets user account num to
+		User.name = GetAccountName(AccountFile, User.acct_num); // Sets user's name
+		PreviousAccountBalance = GetPreviousAccountBalance(TransactionFile, User.acct_num); // Finds user's previous account balance
+		NumberOfDeposits = GetNumberOfDeposits(TransactionFile, User.acct_num); // Counts the number of deposits
+		SumOfDeposits = GetSumOfDeposits(TransactionFile, User.acct_num); // Counts sum of withdrawals
+		NumberOfWithdrawals = GetNumberOfWithdrawals(TransactionFile, User.acct_num); // Counts number of withdrawals
+		SumOfWithdrawals = GetSumOfWithdrawals(TransactionFile, User.acct_num); // Counts sum of withdrawals
 		// If there's no account name continue else Output the report
-		if (AccountName.compare("") == 0)
+		if (User.name.empty())
 			continue;
 		else
-			OutputAccountHistory(AccountNumber, AccountName, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawls, SumOfWithdrawls, Report);
+			OutputAccountHistory(User.acct_num, User.name, PreviousAccountBalance, NumberOfDeposits, SumOfDeposits, NumberOfWithdrawals, SumOfWithdrawals, Report);
 	}
-	// Closes all files used
+	// Closes all files used and exists program
 	AccountFile.close();
 	TransactionFile.close();
 	Report.close();
