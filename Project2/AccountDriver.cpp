@@ -18,8 +18,8 @@ int main()
 	fstream TransactionFile; // File stream storing transactions
 	ofstream Report; // Output File
 	int UsedAccountNumbers[static_cast<int>(2e3)];
-	int AccountNumber = -1; // Account Number
-	string AccountName = ""; // Account Name
+	int AccountNumber; // Account Number
+	string AccountName; // Account Name
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
 	float SumOfDeposits; // Sum of all Deposits
 	int NumberOfDeposits; // Number of Deposits in user account

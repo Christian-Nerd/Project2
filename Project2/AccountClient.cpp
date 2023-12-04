@@ -206,14 +206,8 @@ float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber)
 		// If the next string is the account number
 		if ((CurrentStreamCharacter == '\n' || TransactionHistory.tellg() == 0) && isdigit(TransactionHistory.peek()))
 		{
-			if (TransactionHistory.tellg() == 0)
-			{
-				TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
-			}
-			else
-				TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
-
-			if (CurrentAcccountNumber == AccountNumber) 
+            TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
+			if (CurrentAcccountNumber == AccountNumber)
 			{
 				TransactionHistory >> PreviousAccountBalance; // Assigns previous account balance to a variable
 				TransactionHistory.seekg(ios::beg); // Returns stream to beginning
@@ -288,44 +282,57 @@ float GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber)
 {
 	// Intitilize Variables
 	string CurrentAccountNumber; // Current account number gotten
-	char CurrentStreamCharacter; // Current Character in the stream
+    string CurrentLine; // String variable to holf the current line
+	// char CurrentStreamCharacter; // Current Character in the stream
 	string Dummy; // Dummy variable to clear Previous Balance
-	float CurrentDeposite = 0; // Current Deposite in stream
+	string CurrentDeposite; // Current Deposite in stream
 	float SumOfDeposits = 0; // Sum of all deposits
+    int LineCount = 0; // Number of lines in stream
+    int NumberOfLinesGotten = 0; // Number of lines gotten in second while loop
+    // Counts number of lines
+    while(TransactionHistory)
+    {
+        if(TransactionHistory.get() == '\n')
+            LineCount++;
+    }
+    LineCount++; // Increases one final time to account for initial line
 	// Goes thru to find deposits as long as input/stream is valid
-
 	while (TransactionHistory)
 	{
-		// If account number found assign it to currentaccountnumber and get rid of the previous balance from stream
-		if ((CurrentStreamCharacter == '\n' || TransactionHistory.tellg() == 0) && isdigit((unsigned char)TransactionHistory.peek()))
-		{
-				TransactionHistory >> CurrentAccountNumber;	// Get current account number
-			    TransactionHistory >> Dummy; // Get rid of previous balance from stream
-		}
-		// Check for deposits and add it to the sum if the current account number is the inputted one
-		if (CurrentAccountNumber == to_string(AccountNumber))
-		{
-			switch (tolower(CurrentStreamCharacter))
-			{
-				case 'd':
-					TransactionHistory >> CurrentDeposite;
-					SumOfDeposits += CurrentDeposite;
-					break;
-
-				default:
-                    CurrentStreamCharacter = (char)TransactionHistory.get(); // Finds next character
-					continue;
-			}
-			if (TransactionHistory.peek() == '\n')
-			{
-				return SumOfDeposits;
-			}
-		}
-        CurrentStreamCharacter = (char)TransactionHistory.get(); // Finds next character
+        NumberOfLinesGotten++;
+        if(NumberOfLinesGotten < LineCount) // Checks if there's a valid number of lines gotten
+            getline(TransactionHistory, CurrentLine); // Retrieves the next line
+        else
+            break;
+        CurrentAccountNumber = "";
+        // Checks if correct line
+        for(int i = 0; !isspace(CurrentLine.at(i)); i++)
+        {
+            CurrentAccountNumber.push_back(CurrentLine.at(i));
+        }
+        // If correct line finds CurrentDeposit and adds that to the sum
+        if(CurrentAccountNumber == to_string(AccountNumber))
+        {
+            for(int i = 0; i < CurrentLine.size(); i++)
+            {
+                if(tolower(CurrentLine.at(i)) == 'd')
+                {
+                    i++;
+                    // Adds the number to CurrentWithdrawl
+                    while(!isspace(CurrentLine.at(i)) && i < CurrentLine.size() && TransactionHistory)
+                    {
+                        CurrentDeposite.push_back(CurrentLine.at(i));
+                        i++;
+                    }
+                    SumOfDeposits += stof(CurrentDeposite);
+                    CurrentDeposite = "";
+                }
+            }
+        }
     }
-	TransactionHistory.clear(); // Clears any errors
-	TransactionHistory.seekg(ios::beg); // Returns stream to beginning
-	return SumOfDeposits;
+    TransactionHistory.clear(); // Clears any errors
+    TransactionHistory.seekg(ios_base::beg); // Returns stream to beginning
+    return SumOfDeposits;
 }
 
 //*****************************************************************
@@ -362,10 +369,10 @@ int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 				{
 					case 'w':
 						NumOfWithdrawls++; // Adds 1 to Number of deposits
-						TransactionHistory >> Dummy; // Skips to next word;							
+						TransactionHistory >> Dummy; // Skips to next word;
 						break;
 					default:
-						CurrentStreamCharacter = TransactionHistory.get();
+						CurrentStreamCharacter = (char)TransactionHistory.get();
 						continue;
 				}
 		}
@@ -390,39 +397,40 @@ int GetNumberOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 //*****************************************************************
 float GetSumOfWithdrawls(fstream& TransactionHistory, int AccountNumber)
 {
-	// Initilizes Variables
+	// Initializes Variables
 	string Dummy; // string variable to clear Previous Account Balance
+    string CurrentLine; // String variable to holf the current line
 	string CurrentAccountNumber; // Stores current account number
-	float CurrentWithdrawl = 0; // Current withdrawl number 
+	string CurrentWithdrawl; // Current withdrawl number
 	float SumOfWithdrawls = 0; // Sum of Withdrawls 
-	char CurrentStreamCharacter; // Finds current stream character
+	// char CurrentStreamCharacter; // Finds current stream character
 	while(TransactionHistory)
 	{
-		if ((CurrentStreamCharacter == '\n' || TransactionHistory.tellg() == 0) && isdigit((unsigned char)TransactionHistory.peek()))
-		{
-			if (TransactionHistory.tellg() == 0)
-			{
-				TransactionHistory.putback(CurrentStreamCharacter); // Add First digit of account number 
-				// back into stream
-				TransactionHistory >> CurrentAccountNumber; // Gets current account number
-				TransactionHistory >> Dummy; // Clears Previous Balance
-			}
-			else
-				TransactionHistory >> CurrentAccountNumber;
-		}
-		if (CurrentAccountNumber == to_string(AccountNumber))
-		{
-			switch (tolower(CurrentStreamCharacter)) 
-			{
-				case 'w':
-					TransactionHistory >> CurrentWithdrawl;
-					SumOfWithdrawls += CurrentWithdrawl;
-					break;
-				default:
-					break;
-			}
-		}
-        CurrentStreamCharacter = (char)TransactionHistory.get();
+        getline(TransactionHistory, CurrentLine); // Retrieves the next line
+        // Checks if correct line
+        for(int i = 0; !isspace(CurrentLine.at(i)); i++)
+        {
+            CurrentAccountNumber.push_back(CurrentLine.at(i));
+        }
+        // If correct line finds CurrentDeposit and adds that to the sum
+        if(CurrentAccountNumber == to_string(AccountNumber))
+        {
+            for(int i = 0; i < CurrentLine.size(); i++)
+            {
+                if(tolower(CurrentLine.at(i)) == 'w')
+                {
+                    i++;
+                    // Adds the number to CurrentWithdrawl
+                    while(!isspace(CurrentLine.at(i)) && i < CurrentWithdrawl.size() && TransactionHistory)
+                    {
+                        CurrentWithdrawl.push_back(CurrentLine.at(i));
+                        i++;
+                    }
+                    SumOfWithdrawls += stof(CurrentWithdrawl);
+                    CurrentWithdrawl = "";
+                }
+            }
+        }
     }
 	TransactionHistory.clear(); // Clears any errors
 	TransactionHistory.seekg(ios_base::beg); // Returns stream to beginning
