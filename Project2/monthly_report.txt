@@ -1,40 +1,40 @@
-Name : fanny
-Account Number : 55
-Beginning Balance : 2000.00
-Ending Balance : 3615.00
-Number of Deposits : 5
+Name : daffy
+Account Number : 123
+Beginning Balance : 34.67
+Ending Balance : 283.11
+Number of Deposits : 3
+Amount Withdrawn : 45.67
+Number of Withdrawls : 1
+
+Name : goofy
+Account Number : 345
+Beginning Balance : 123.89
+Ending Balance : 123.89
+Number of Deposits : 0
 Amount Withdrawn : 0.00
+Number of Withdrawls : 0
+
+Name : sneezy
+Account Number : 639
+Beginning Balance : 1945.76
+Ending Balance : 3778.33
+Number of Deposits : 2
+Amount Withdrawn : 402.33
 Number of Withdrawls : 3
 
-Name : ronald
-Account Number : 66
-Beginning Balance : 1000.00
-Ending Balance : 1800.00
-Number of Deposits : 2
-Amount Withdrawn : 0.00
-Number of Withdrawls : 4
+Name : dopey
+Account Number : 890
+Beginning Balance : 12345668.00
+Ending Balance : 12346194.00
+Number of Deposits : 4
+Amount Withdrawn : 34.77
+Number of Withdrawls : 1
 
-Name : kite
-Account Number : 89
-Beginning Balance : 20000.00
-Ending Balance : 21281.00
-Number of Deposits : 2
+Name : grumpy
+Account Number : 666
+Beginning Balance : 666.66
+Ending Balance : 8139.84
+Number of Deposits : 5
 Amount Withdrawn : 0.00
 Number of Withdrawls : 0
-
-Name : donald
-Account Number : 98
-Beginning Balance : 92731.00
-Ending Balance : 102940.00
-Number of Deposits : 3
-Amount Withdrawn : 0.00
-Number of Withdrawls : 0
-
-Name : john
-Account Number : 100
-Beginning Balance : 7820.00
-Ending Balance : 8802.00
-Number of Deposits : 1
-Amount Withdrawn : 0.00
-Number of Withdrawls : 2
 

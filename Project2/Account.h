@@ -12,6 +12,7 @@
 // 
 //********************************************************
 #include <string> // For actual strings
+#include<sstream>
 #include<fstream> // For file manipulation
 #include<iostream> // For regular i/o manipulation
 #include<iomanip> // For setprecision
