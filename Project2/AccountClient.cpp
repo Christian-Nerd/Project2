@@ -3,8 +3,8 @@
 // Programmer: Trey Davis
 // Instructor: B.J Streller
 // Course: CS121
-// Date Created: 12/1/23
-// Date Modified: 12/1/23
+// Date Created: 12/4/23
+// Date Modified: 12/4/23
 // Input Files; File storing account listing in the form as shown in the pdf, File for transaction history
 // Output Files: monthly_report.txt stores monthly report
 // Modules: idk
@@ -55,7 +55,7 @@ void GetAccountFile(fstream& File)
 //*****************************************************************
 void GetTransactionHistoryFile(fstream& File) 
 {
-	string FileName; // Stores file name
+	string FileName = ""; // Stores file name
 	// Error Checking loop
 	do
 	{
@@ -106,7 +106,7 @@ int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNu
 {
 	//Initializes Variables
 	int CurrentAccountNumber = -1; // Potential Account Number
-	char CurrentStreamCharacter; // Finds current stream character
+	char CurrentStreamCharacter = ' '; // Finds current stream character
     bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
 	// Until end of file checks for an unused account number
 	while (!AccountFile.fail())
@@ -157,12 +157,12 @@ int GetAccountNumber(fstream& AccountFile, int UsedAccountNumbers[], int &NoOfNu
 string GetAccountName(fstream& AccountFile, int AccountNumber) 
 {
 	// Initializes Variables
-	string AccountName; // Account name associated with user
+	string AccountName = ""; // Account name associated with user
 	//char CurrentStreamCharacter = AccountFile.get(); // Finds current stream character
 	// Searches account file for account number and then finds it
 	while (!AccountFile.fail()) 
 	{
-		int CurrentAccountNumber; // Current Account Number
+		int CurrentAccountNumber = -1; // Current Account Number
 		// If next string account number
 		//int Position = AccountFile.tellg(); // Gets position to check if at beginning of stream
 
@@ -201,35 +201,45 @@ string GetAccountName(fstream& AccountFile, int AccountNumber)
 //*****************************************************************
 float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber) 
 {
-	// Initialize Variables
-	float PreviousAccountBalance; // Previous Account Balance
-	char CurrentStreamCharacter; // Finds current stream character
-    bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
-	int CurrentAcccountNumber; // Checks for current account number to see if it's out account number
-    // Iterates through list and gets previous account balance
-	while (!TransactionHistory.fail())
-	{
-		// If the next string is the account number
-		if ((CurrentStreamCharacter == '\n' || AtBeginningOfStream) && isdigit(TransactionHistory.peek()))
-		{
-			TransactionHistory >> CurrentAcccountNumber; // Finds Current Account Number and puts it in a variable
-			if (CurrentAcccountNumber == AccountNumber)
-			{
-				TransactionHistory >> PreviousAccountBalance; // Assigns previous account balance to a variable
-				TransactionHistory.seekg(ios::beg); // Returns stream to beginning
-				return PreviousAccountBalance;
-			}
-		}
-        CurrentStreamCharacter = (char)TransactionHistory.get(); // Finds next current stream character
-        AtBeginningOfStream = false;
-	}
-    TransactionHistory.clear(); // Clear stream of errors
-	TransactionHistory.seekg(ios::beg); // Returns stream to beginning
-	return -1;
+    // Initilizes Variables
+    bool IsAtBeginningOfStream = true; // Checks if you're at beginning of stream
+    bool IsAtEndOfCorrectLine = false; // Checks if at end of line
+    char CurrentStreamCharacter = ' '; // Checks Current Stream Character
+    string CurrentLine = ""; // Current Line
+    stringstream CurrentLineStream; // StreamVersion of CurrentLine
+    float PreviousAccountBalance = (float)-1.28922839e6; // Previous Account Balance
+    int CurrentAccountNumber = -1; // Current Account Number
+
+    // Iteratres thru list and finds
+    while (TransactionHistory) 
+    {
+        // Checks if you're near an account number and finds current account number and previous account balance
+        if ((CurrentStreamCharacter == '\n' || IsAtBeginningOfStream) && isdigit((unsigned char)TransactionHistory.peek())) 
+        {
+            getline(TransactionHistory, CurrentLine);
+            CurrentLineStream.str(CurrentLine); // Assigns CurrentLineStream to the current line
+            CurrentLineStream >> CurrentAccountNumber; // Assigns the current account number to CurrentAccountNumber
+            CurrentLineStream >> PreviousAccountBalance;
+            if (!CurrentLineStream)
+            {
+                CurrentLineStream.clear();
+                CurrentLineStream.seekg(ios::beg);
+                continue;
+            }
+            else
+                break;
+
+        }
+        CurrentStreamCharacter = (char)TransactionHistory.get();  
+        IsAtBeginningOfStream = false;
+    }
+    TransactionHistory.clear();
+    TransactionHistory.seekg(ios::beg);
+    return PreviousAccountBalance;
 }
 
 //*****************************************************************
-// Function Name: GetNumberOfDeposits
+// Functiton Name: GetNumberOfDeposits
 // Purpose: Gets & returns the of all deposits associated with a user in the Transaction File
 // Parameters:
 //		Input: Transaction File, Account Number
@@ -244,11 +254,11 @@ int GetNumberOfDeposits(fstream& TransactionHistory, int AccountNumber)
     // Initialize Variables
     string CurrentLine = " "; // Initialized to space to eliminate errors
     stringstream CurrentLineStream; // Current Line represented as a string
-    int CurrentAccountNumber; // Current Account Number
-    float CurrentDeposite; // Current Deposite
+    int CurrentAccountNumber = -1; // Current Account Number
+    float CurrentDeposite = 0; // Current Deposite
     int NumsOfDeposits = 0; // Sum of all deposits
     bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
-    char CurrentStreamCharacter; // Current Stream Character
+    char CurrentStreamCharacter = ' '; // Current Stream Character
     // Iterate thru list as long as Stream is valid and not at eof of CurrentLine
     while(TransactionHistory)
     {
@@ -302,11 +312,11 @@ float GetSumOfDeposits(fstream& TransactionHistory, int AccountNumber)
     // Initialize Variables
     string CurrentLine = " "; // Initialized to space to eliminate errors
     stringstream CurrentLineStream; // Current Line represented as a string
-    int CurrentAccountNumber; // Current Account Number
-    float CurrentDeposite; // Current Deposite
+    int CurrentAccountNumber = -1; // Current Account Number
+    float CurrentDeposite = 0; // Current Deposite
     float SumOfDeposits = 0; // Sum of all deposits
     bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
-    char CurrentStreamCharacter; // Current Stream Character
+    char CurrentStreamCharacter = ' '; // Current Stream Character
     // Iterate thru list as long as Stream is valid and not at eof of CurrentLine
     while(TransactionHistory)
     {
@@ -359,11 +369,11 @@ int GetNumberOfWithdrawals(fstream& TransactionHistory, int AccountNumber)
     // Initialize Variables
     string CurrentLine = " "; // Initialized to space to eliminate errors
     stringstream CurrentLineStream; // Current Line represented as a string
-    int CurrentAccountNumber; // Current Account Number
-    float CurrentWithdrawals; // Current Withdrawals
+    int CurrentAccountNumber = -1; // Current Account Number
+    float CurrentWithdrawals = 0; // Current Withdrawals
     int NumsOfWithdrawals = 0; // Sum of all deposits
     bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
-    char CurrentStreamCharacter; // Current Stream Character
+    char CurrentStreamCharacter = ' '; // Current Stream Character
     // Iterate thru list as long as Stream is valid and not at eof of CurrentLine
     while(TransactionHistory)
     {
@@ -417,11 +427,11 @@ float GetSumOfWithdrawals(fstream& TransactionHistory, int AccountNumber)
     // Initialize Variables
     string CurrentLine = " "; // Initialized to space to eliminate errors
     stringstream CurrentLineStream; // Current Line represented as a string
-    int CurrentAccountNumber; // Current Account Number
-    float CurrentWithdrawl; // Current Deposite
+    int CurrentAccountNumber = -1; // Current Account Number
+    float CurrentWithdrawl = 0; // Current Deposite
     float SumOfWithdrawals = 0; // Sum of all deposits
     bool AtBeginningOfStream = true; // Checks if you're at the start of the stream
-    char CurrentStreamCharacter; // Current Stream Character
+    char CurrentStreamCharacter = ' '; // Current Stream Character
     // Iterate thru list as long as Stream is valid and not at eof of CurrentLine
     while(TransactionHistory)
     {
@@ -491,7 +501,7 @@ bool IsThereDifferentAccounts(fstream& AccountFile, int UsedAccountNumbers[], in
 				AccountFile >> CurrentAccountNumber;
 		}
 		// Checks if CurrentAccountNumber in list and returns it if so
-		if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) == -1)) 
+		if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) == -1) && CurrentAccountNumber != -2) 
 		{
 			AccountFile.clear(); // Clears any errors
 			AccountFile.seekg(ios::beg); // Sends string to the beginning
@@ -500,7 +510,7 @@ bool IsThereDifferentAccounts(fstream& AccountFile, int UsedAccountNumbers[], in
         IsAtBeginningOfStream = false; // Is at beginning of stream is now false
 	}
     // Checks if the account number isn't in the list
-	if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) > -1))
+	if ((LinearSearch(UsedAccountNumbers, NoOfUsedAccountNumbers, CurrentAccountNumber) > -1) && CurrentAccountNumber != -2)
 	{
 		AccountFile.clear(); // Clears any errors		
 		AccountFile.seekg(ios::beg); // Sends string to the beginning

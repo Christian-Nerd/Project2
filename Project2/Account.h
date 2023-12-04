@@ -3,7 +3,7 @@
 // Programmer: Trey Davis
 // Instructor: B.J. Streller
 // Course: CS121
-// Date: 11/29/23
+// Date: 12/4/23
 // Program Name: Account.h
 // Input Files: None
 // Output Files: None
@@ -24,9 +24,9 @@ using namespace std;
 // Represents each user's account
 struct Account
 {
-	int acct_num; // Account Number
-	string name; // Name of person with account
-	int acct_val; // Current net account value
+	int acct_num = 0; // Account Number
+	string name = ""; // Name of person with account
+	int acct_val = 0; // Current net account value
 };
 void GetAccountFile(fstream& File // IN: Account File
 				    ); // Finds account file name and error checks if it's accurate then opens it
@@ -65,9 +65,9 @@ void OutputAccountHistory(int AccountNumber, // IN: Account Number of user
 						  float Withdrawls, // IN: Sum of withdrawls
 						  ofstream& Report // OUT: Monthly report file to output to
 						  ); // Outputs the monthly report
-bool IsThereDifferentAccounts(fstream& AccountFile, // File containing account numbers
-						      int UsedAccountNumbers[], // Array containing all used account numbers
-							  int NoOfUsedAccountNumbers // Size of array
+bool IsThereDifferentAccounts(fstream& AccountFile, // IN: File containing account numbers
+						      int UsedAccountNumbers[], // IN: Array containing all used account numbers
+							  int NoOfUsedAccountNumbers // IN: Size of array
 							); // Checks if there are any used account numbers
 int LinearSearch(int const List[], // Array we are searching
 				int Size, // Size of Array

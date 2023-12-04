@@ -108,8 +108,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <StackReserveSize>1000000</StackReserveSize>
-      <StackCommitSize>4,000</StackCommitSize>
+      <StackReserveSize>
+      </StackReserveSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,7 +135,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="accounts.txt" />
+    <Text Include="accounts2.txt" />
+    <Text Include="monthly_report.txt" />
     <Text Include="transactions.txt" />
+    <Text Include="transactions2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccountClient.cpp" />

@@ -3,8 +3,8 @@
 // Programmer: Trey Davis
 // Instructor: B.J Streller
 // Course: CS121
-// Date Created: 11/30/23
-// Date Modified: 11/30/23
+// Date Created: 12/4/23
+// Date Modified: 12/4/23
 // Input Files; File storing account listing in the form as shown in the pdf, File for transaction history
 // Output Files: monthly_report.txt stores monthly report
 // Modules Used: idk
@@ -20,11 +20,11 @@ int main()
 	int UsedAccountNumbers[static_cast<int>(2e3)]; // Array that stores previously used account numbers
     Account Accounts[static_cast<int>(2e3)]; // Array that stores users
 	int NoOfUsedAccountNumbers = 0; // Number of used account numbers
-	float SumOfDeposits; // Sum of all Deposits
-	int NumberOfDeposits; // Number of Deposits in user account
-	float SumOfWithdrawals; // Sum of all Withdrawals
-	int NumberOfWithdrawals; // Number of Withdrawals in user account
-	float PreviousAccountBalance; // Starting balance at beginning of month
+	float SumOfDeposits = 0; // Sum of all Deposits
+	int NumberOfDeposits = 0; // Number of Deposits in user account
+	float SumOfWithdrawals = 0; // Sum of all Withdrawals
+	int NumberOfWithdrawals = 0; // Number of Withdrawals in user account
+	float PreviousAccountBalance = 0; // Starting balance at beginning of month
 	// Initializing values with functions and outputting the report for each user
 	GetAccountFile(AccountFile); // Putting account file in the stream
 	GetOutputFile(Report); // Opens output file

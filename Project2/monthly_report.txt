@@ -8,32 +8,32 @@ Number of Withdrawals : 1
 
 Name : goofy
 Account Number : 345
-Beginning Balance : 123.89
-Ending Balance : 123.89
+Beginning Balance : 34.67
+Ending Balance : 34.67
 Number of Deposits : 0
 Amount Withdrawn : 0.00
 Number of Withdrawals : 0
 
 Name : sneezy
 Account Number : 639
-Beginning Balance : 1945.76
-Ending Balance : 3778.33
+Beginning Balance : 34.67
+Ending Balance : 1867.24
 Number of Deposits : 2
 Amount Withdrawn : 402.33
 Number of Withdrawals : 3
 
 Name : dopey
 Account Number : 890
-Beginning Balance : 12345668.00
-Ending Balance : 12346194.00
+Beginning Balance : 34.67
+Ending Balance : 561.22
 Number of Deposits : 4
 Amount Withdrawn : 34.77
 Number of Withdrawals : 1
 
 Name : grumpy
 Account Number : 666
-Beginning Balance : 666.66
-Ending Balance : 8139.84
+Beginning Balance : 34.67
+Ending Balance : 7507.85
 Number of Deposits : 5
 Amount Withdrawn : 0.00
 Number of Withdrawals : 0

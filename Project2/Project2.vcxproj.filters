@@ -23,12 +23,25 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="accounts.txt" />
-    <Text Include="transactions.txt" />
+    <Text Include="monthly_report.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="accounts.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="transactions.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="accounts2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="transactions2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
