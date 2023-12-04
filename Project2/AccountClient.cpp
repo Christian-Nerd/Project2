@@ -208,7 +208,7 @@ float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber)
     string CurrentLine = ""; // Current Line
     stringstream CurrentLineStream; // StreamVersion of CurrentLine
     float PreviousAccountBalance = (float)-1.28922839e6; // Previous Account Balance
-    int CurrentAccountNumber = -1; // Current Account Number
+    int CurrentAccountNumber = -1; // 66Current Account Number
 
     // Iteratres thru list and finds
     while (TransactionHistory) 
@@ -217,16 +217,17 @@ float GetPreviousAccountBalance(fstream& TransactionHistory, int AccountNumber)
         if ((CurrentStreamCharacter == '\n' || IsAtBeginningOfStream) && isdigit((unsigned char)TransactionHistory.peek())) 
         {
             getline(TransactionHistory, CurrentLine);
+            TransactionHistory.putback('\n');
             CurrentLineStream.str(CurrentLine); // Assigns CurrentLineStream to the current line
             CurrentLineStream >> CurrentAccountNumber; // Assigns the current account number to CurrentAccountNumber
             CurrentLineStream >> PreviousAccountBalance;
-            if (!CurrentLineStream)
-            {
+             if (!CurrentLineStream)
+            { 
                 CurrentLineStream.clear();
                 CurrentLineStream.seekg(ios::beg);
                 continue;
             }
-            else
+            else if(CurrentAccountNumber == AccountNumber)
                 break;
 
         }
@@ -568,6 +569,7 @@ void OutputAccountHistory(int AccountNumber, string AccountName, float Beginning
 	cout << "Ending Balance : " << (BeginningBalance - Withdrawals + Deposits) << endl;
 	Report << "Ending Balance : " << (BeginningBalance - Withdrawals + Deposits) << endl;
 	cout << "Amount Deposited : " << Deposits << endl;
+	Report << "Amount Deposited : " << Deposits << endl;
 	cout << "Number of Deposits : " << NumberOfDeposits << endl;
 	Report << "Number of Deposits : " << NumberOfDeposits << endl;
 	cout << "Amount Withdrawn : " << Withdrawals << endl;
