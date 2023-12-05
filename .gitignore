@@ -13,6 +13,8 @@
 *.idea
 [Cc]make*/
 *.DS_STORE
+*.docx
+*.odt
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
